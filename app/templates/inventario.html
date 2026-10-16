@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}Inventario{% endblock %}
+{% block contenido %}
+<h1>Inventario <a class="boton" href="{{ url_for('form_producto') }}">+ Nuevo producto</a></h1>
+<form class="filtros" method="get">
+  <label>Categoría
+    <select name="categoria">
+      <option value="">Todas</option>
+      {% for c in categorias %}<option {{ 'selected' if c.nombre == categoria }}>{{ c.nombre }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="check"><input type="checkbox" name="alerta" value="1" {{ 'checked' if solo_alerta }}> Solo por reponer</label>
+  <button>Filtrar</button>
+</form>
+<table>
+  <thead><tr><th>Producto</th><th>Categoría</th><th>Proveedor</th><th class="num">Compra</th><th class="num">Venta</th><th class="num">Margen</th><th class="num">Stock</th><th class="num">Mín.</th><th>Reponer</th><th></th></tr></thead>
+  <tbody>
+  {% for p in productos %}
+    <tr class="{{ 'alerta' if p.requiere_reposicion }} {{ 'inactivo' if not p.activo }}">
+      <td>{{ p.nombre }}<br><small>{{ p.unidad_venta }}{% if p.fecha_vencimiento %} · vence {{ p.fecha_vencimiento.strftime('%d/%m/%Y') }}{% endif %}</small></td>
+      <td>{{ p.categoria }}</td>
+      <td>{{ p.proveedor }}</td>
+      <td class="num">{{ p.precio_compra|soles }}</td>
+      <td class="num">{{ p.precio_venta|soles }}</td>
+      <td class="num">{{ p.margen_pct }}%</td>
+      <td class="num"><strong>{{ p.stock_actual }}</strong></td>
+      <td class="num">{{ p.stock_minimo }}</td>
+      <td>
+        <form method="post" action="{{ url_for('reponer', id_producto=p.id_producto) }}" class="en-linea">
+          <input type="number" name="cantidad" min="1" placeholder="Cant." class="corto" required>
+          <button class="secundario">+</button>
+        </form>
+      </td>
+      <td><a href="{{ url_for('form_producto', id_producto=p.id_producto) }}">Editar</a></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="10" class="vacio">No hay productos con ese filtro.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

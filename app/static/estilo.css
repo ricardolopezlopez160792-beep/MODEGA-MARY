@@ -1,0 +1,60 @@
+:root {
+  --fondo: #f6f4ef; --papel: #ffffff; --texto: #1f2a2e; --suave: #5f6b70;
+  --linea: #e2ddd2; --acento: #0f766e; --acento-osc: #0b5a54;
+  --alerta: #fff4e5; --error: #b42318; --ok: #157a3c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--fondo); color: var(--texto); font-size: 15px; }
+header { background: var(--acento); color: #fff; padding: 12px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+.marca { color: #fff; font-weight: 700; font-size: 20px; text-decoration: none; }
+nav { display: flex; flex-wrap: wrap; gap: 4px; }
+nav a { color: #e6fffb; text-decoration: none; padding: 6px 12px; border-radius: 6px; }
+nav a:hover { background: var(--acento-osc); }
+nav a.destacado { background: #fff; color: var(--acento); font-weight: 600; }
+main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 48px; }
+footer { text-align: center; color: var(--suave); font-size: 12px; padding: 16px; }
+h1 { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 24px; }
+h2 { font-size: 17px; margin-top: 28px; }
+h2 small, .nota { color: var(--suave); font-weight: normal; font-size: 13px; }
+a { color: var(--acento); }
+table { width: 100%; border-collapse: collapse; background: var(--papel); border: 1px solid var(--linea); }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--linea); text-align: left; vertical-align: middle; }
+th { background: #faf8f3; font-size: 13px; color: var(--suave); }
+td small { color: var(--suave); }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.alerta td { background: var(--alerta); }
+tr.inactivo td { opacity: .5; }
+.vacio { text-align: center; color: var(--suave); padding: 20px; }
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tarjeta { background: var(--papel); border: 1px solid var(--linea); border-radius: 8px; padding: 14px 16px; }
+.tarjeta span { display: block; color: var(--suave); font-size: 13px; }
+.tarjeta strong { font-size: 24px; }
+.dos-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 860px) { .dos-columnas { grid-template-columns: 1fr; } table { display: block; overflow-x: auto; } }
+button, .boton { background: var(--acento); color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; font: inherit; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-block; }
+button:hover, .boton:hover { background: var(--acento-osc); }
+.secundario { background: #fff; color: var(--acento); border: 1px solid var(--acento); }
+.secundario:hover { background: #eefaf8; }
+.peligro { background: var(--error); }
+input, select { font: inherit; padding: 7px 9px; border: 1px solid #cfc9bc; border-radius: 6px; background: #fff; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--suave); }
+label.check { flex-direction: row; align-items: center; gap: 6px; }
+.filtros { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 12px; }
+.filtros input[type=search] { min-width: 280px; }
+.panel-form { background: var(--papel); border: 1px solid var(--linea); border-radius: 8px; padding: 18px; }
+.panel-form .fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 14px; }
+.panel-form table { margin: 8px 0; }
+.en-linea { display: inline-flex; gap: 4px; margin: 0; }
+.corto { width: 72px; }
+.cant { width: 80px; text-align: right; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.acciones form { margin: 0; }
+.aviso { padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; border: 1px solid; }
+.aviso.ok { background: #ecfdf3; border-color: #abefc6; color: var(--ok); }
+.aviso.error { background: #fef3f2; border-color: #fecdca; color: var(--error); }
+.estado { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+.estado.pagada { background: #ecfdf3; color: var(--ok); }
+.estado.fiado { background: var(--alerta); color: #9a5b00; }
+.estado.anulada { background: #f2f4f7; color: var(--suave); text-decoration: line-through; }
+.barra-col { width: 30%; }
+.barra { height: 12px; background: var(--acento); border-radius: 3px; opacity: .75; }

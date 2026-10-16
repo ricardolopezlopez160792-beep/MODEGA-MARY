@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block titulo %}Reportes{% endblock %}
+{% block contenido %}
+<h1>Reportes
+  <form method="post" action="{{ url_for('actualizar_reportes') }}" class="en-linea">
+    <button class="secundario" title="REFRESH MATERIALIZED VIEW CONCURRENTLY mv_ventas_diarias">Cierre de caja: actualizar</button>
+  </form>
+</h1>
+
+<section>
+  <h2>Ventas y ganancia por mes <small>(vista materializada mv_ventas_diarias)</small></h2>
+  <table>
+    <thead><tr><th>Mes</th><th class="num">N.º ventas</th><th class="num">Venta</th><th class="num">Ganancia</th><th class="barra-col"></th></tr></thead>
+    <tbody>
+    {% for m in mensual %}
+      <tr><td>{{ m.mes.strftime('%m/%Y') }}</td><td class="num">{{ m.n_ventas }}</td><td class="num">{{ m.venta|soles }}</td><td class="num">{{ m.ganancia|soles }}</td>
+          <td class="barra-col"><div class="barra" style="width: {{ (m.venta / max_mes * 100)|round(1) }}%"></div></td></tr>
+    {% else %}
+      <tr><td colspan="5" class="vacio">Sin datos. Pulsa “Cierre de caja: actualizar”.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<div class="dos-columnas">
+  <section>
+    <h2>Top 10 productos</h2>
+    <table>
+      <thead><tr><th>Producto</th><th class="num">Unid.</th><th class="num">Venta</th><th class="num">Ganancia</th></tr></thead>
+      <tbody>{% for t in top %}<tr><td>{{ t.nombre }}</td><td class="num">{{ t.unidades }}</td><td class="num">{{ t.venta|soles }}</td><td class="num">{{ t.ganancia|soles }}</td></tr>{% endfor %}</tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Por categoría</h2>
+    <table>
+      <thead><tr><th>Categoría</th><th class="num">Unid.</th><th class="num">Venta</th><th class="num">Ganancia</th></tr></thead>
+      <tbody>{% for c in categorias %}<tr><td>{{ c.categoria }}</td><td class="num">{{ c.unidades }}</td><td class="num">{{ c.venta|soles }}</td><td class="num">{{ c.ganancia|soles }}</td></tr>{% endfor %}</tbody>
+    </table>
+    <h2>Por medio de pago</h2>
+    <table>
+      <thead><tr><th>Medio</th><th class="num">N.º ventas</th><th class="num">Total</th></tr></thead>
+      <tbody>{% for m in medios %}<tr><td>{{ m.medio_pago }}</td><td class="num">{{ m.n_ventas }}</td><td class="num">{{ m.total|soles }}</td></tr>{% endfor %}</tbody>
+    </table>
+  </section>
+</div>
+
+<section>
+  <h2>Clientes con más fiado pendiente</h2>
+  <table>
+    <thead><tr><th>Cliente</th><th>Teléfono</th><th class="num">Límite</th><th class="num">Deuda</th></tr></thead>
+    <tbody>
+    {% for d in deudores %}
+      <tr class="{{ 'alerta' if d.deuda > d.limite_credito }}"><td><a href="{{ url_for('ver_cliente', id_cliente=d.id_cliente) }}">{{ d.apellidos }}, {{ d.nombres }}</a></td><td>{{ d.telefono or '—' }}</td><td class="num">{{ d.limite_credito|soles }}</td><td class="num">{{ d.deuda|soles }}</td></tr>
+    {% else %}
+      <tr><td colspan="4" class="vacio">Nadie debe.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titulo %}{{ 'Editar' if id_producto else 'Nuevo' }} producto{% endblock %}
+{% block contenido %}
+<h1>{{ 'Editar' if id_producto else 'Nuevo' }} producto</h1>
+<form method="post" class="panel-form">
+  <div class="fila">
+    <label>Nombre <input name="nombre" value="{{ p.nombre or '' }}" required maxlength="100"></label>
+    <label>Código de barras <input name="codigo_barras" value="{{ p.codigo_barras or '' }}" maxlength="20"></label>
+    <label>Unidad de venta <input name="unidad_venta" value="{{ p.unidad_venta or '' }}" required maxlength="15" placeholder="Botella, Kilo, Lata…"></label>
+  </div>
+  <div class="fila">
+    <label>Categoría
+      <select name="id_categoria">{% for c in categorias %}<option value="{{ c.id_categoria }}" {{ 'selected' if c.id_categoria == p.id_categoria }}>{{ c.nombre }}</option>{% endfor %}</select>
+    </label>
+    <label>Proveedor
+      <select name="id_proveedor">{% for pr in proveedores %}<option value="{{ pr.id_proveedor }}" {{ 'selected' if pr.id_proveedor == p.id_proveedor }}>{{ pr.razon_social }}</option>{% endfor %}</select>
+    </label>
+  </div>
+  <div class="fila">
+    <label>Precio de compra (S/) <input type="number" step="0.01" min="0.01" name="precio_compra" value="{{ p.precio_compra or '' }}" required></label>
+    <label>Precio de venta (S/) <input type="number" step="0.01" min="0.01" name="precio_venta" value="{{ p.precio_venta or '' }}" required></label>
+    {% if not id_producto %}<label>Stock inicial <input type="number" min="0" name="stock_actual" value="0"></label>{% endif %}
+    <label>Stock mínimo <input type="number" min="0" name="stock_minimo" value="{{ p.stock_minimo if p.stock_minimo is not none else 5 }}"></label>
+  </div>
+  {% if id_producto %}<label class="check"><input type="checkbox" name="activo" {{ 'checked' if p.activo }}> Producto activo (se puede vender)</label>{% endif %}
+  <p class="nota">La base valida que el precio de venta no sea menor al de compra (restricción ck_precio_venta).</p>
+  <button>Guardar</button>
+  <a class="boton secundario" href="{{ url_for('inventario') }}">Cancelar</a>
+</form>
+{% endblock %}

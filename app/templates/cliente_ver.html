@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titulo %}{{ cliente.nombres }} {{ cliente.apellidos }}{% endblock %}
+{% block contenido %}
+<h1>{{ cliente.nombres }} {{ cliente.apellidos }} <a class="boton secundario" href="{{ url_for('form_cliente', id_cliente=cliente.id_cliente) }}">Editar</a></h1>
+<div class="tarjetas">
+  <div class="tarjeta"><span>DNI</span><strong>{{ cliente.dni or '—' }}</strong></div>
+  <div class="tarjeta"><span>Compras</span><strong>{{ cliente.n_compras }}</strong></div>
+  <div class="tarjeta"><span>Límite de crédito</span><strong>{{ cliente.limite_credito|soles }}</strong></div>
+  <div class="tarjeta"><span>Deuda (fiado)</span><strong>{{ cliente.deuda|soles }}</strong></div>
+</div>
+<h2>Últimas compras</h2>
+{% with lista=compras %}{% include "_tabla_ventas.html" %}{% endwith %}
+{% endblock %}

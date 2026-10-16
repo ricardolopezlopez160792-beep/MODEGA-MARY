@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Bodega Mary{% endblock %} · Bodega Mary</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+<header>
+  <a class="marca" href="{{ url_for('panel') }}">Bodega Mary</a>
+  <nav>
+    <a href="{{ url_for('panel') }}">Panel</a>
+    <a href="{{ url_for('nueva_venta') }}" class="destacado">+ Nueva venta</a>
+    <a href="{{ url_for('ventas') }}">Ventas</a>
+    <a href="{{ url_for('clientes') }}">Clientes</a>
+    <a href="{{ url_for('inventario') }}">Inventario</a>
+    <a href="{{ url_for('reportes') }}">Reportes</a>
+  </nav>
+</header>
+<main>
+  {% for tipo, texto in get_flashed_messages(with_categories=true) %}
+    <div class="aviso {{ tipo }}">{{ texto }}</div>
+  {% endfor %}
+  {% block contenido %}{% endblock %}
+</main>
+<footer>Sistema de gestión · PostgreSQL 16 · esquema <code>bodega</code></footer>
+</body>
+</html>

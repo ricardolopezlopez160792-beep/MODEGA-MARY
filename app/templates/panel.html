@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block titulo %}Panel{% endblock %}
+{% block contenido %}
+<h1>Panel del día</h1>
+<div class="tarjetas">
+  <div class="tarjeta"><span>Ventas de hoy</span><strong>{{ hoy.n_ventas }}</strong></div>
+  <div class="tarjeta"><span>Vendido hoy</span><strong>{{ hoy.total|soles }}</strong></div>
+  <div class="tarjeta"><span>Fiado por cobrar</span><strong>{{ totales.fiado|soles }}</strong></div>
+  <div class="tarjeta"><span>Productos / Clientes</span><strong>{{ totales.productos }} / {{ totales.clientes }}</strong></div>
+</div>
+
+<div class="dos-columnas">
+  <section>
+    <h2>Alertas de reposición <small>(vista v_alerta_stock)</small></h2>
+    <table>
+      <thead><tr><th>Producto</th><th class="num">Stock</th><th class="num">Mínimo</th></tr></thead>
+      <tbody>
+      {% for a in alertas %}
+        <tr class="alerta"><td>{{ a.nombre }}</td><td class="num">{{ a.stock_actual }}</td><td class="num">{{ a.stock_minimo }}</td></tr>
+      {% else %}
+        <tr><td colspan="3" class="vacio">Todo el stock está sobre el mínimo.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Últimas ventas</h2>
+    {% with lista=ultimas %}{% include "_tabla_ventas.html" %}{% endwith %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<table>
+  <thead><tr><th>#</th><th>Fecha y hora</th><th>Cliente</th><th>Pago</th><th class="num">Ítems</th><th class="num">Total</th><th>Estado</th></tr></thead>
+  <tbody>
+  {% for v in lista %}
+    <tr>
+      <td><a href="{{ url_for('detalle_venta', id_venta=v.id_venta) }}">{{ v.id_venta }}</a></td>
+      <td>{{ v.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</td>
+      <td>{{ v.cliente }}</td>
+      <td>{{ v.medio_pago }}</td>
+      <td class="num">{{ v.n_items }}</td>
+      <td class="num">{{ v.total|soles }}</td>
+      <td><span class="estado {{ v.estado|lower }}">{{ v.estado }}</span></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="vacio">No hay ventas.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>

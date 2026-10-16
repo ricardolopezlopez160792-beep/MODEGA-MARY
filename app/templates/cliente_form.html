@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block titulo %}{{ 'Editar' if id_cliente else 'Nuevo' }} cliente{% endblock %}
+{% block contenido %}
+<h1>{{ 'Editar' if id_cliente else 'Nuevo' }} cliente</h1>
+<form method="post" class="panel-form">
+  <div class="fila">
+    <label>DNI <input name="dni" value="{{ cliente.dni or '' }}" pattern="[0-9]{8}" maxlength="8" title="8 dígitos"></label>
+    <label>Nombres <input name="nombres" value="{{ cliente.nombres or '' }}" required maxlength="60"></label>
+    <label>Apellidos <input name="apellidos" value="{{ cliente.apellidos or '' }}" required maxlength="60"></label>
+  </div>
+  <div class="fila">
+    <label>Teléfono <input name="telefono" value="{{ cliente.telefono or '' }}" maxlength="15"></label>
+    <label>Dirección <input name="direccion" value="{{ cliente.direccion or '' }}" maxlength="120"></label>
+    <label>Límite de crédito (S/) <input type="number" step="0.01" min="0" name="limite_credito" value="{{ cliente.limite_credito or 0 }}"></label>
+  </div>
+  <button>Guardar</button>
+  <a class="boton secundario" href="{{ url_for('clientes') }}">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block titulo %}Nueva venta{% endblock %}
+{% block contenido %}
+<h1>Nueva venta</h1>
+<form method="post" id="form-venta" class="panel-form">
+  <div class="fila">
+    <label>Cliente
+      <select name="id_cliente">
+        <option value="">Cliente ocasional</option>
+        {% for c in clientes %}<option value="{{ c.id_cliente }}">{{ c.apellidos }}, {{ c.nombres }} ({{ c.dni or 's/DNI' }})</option>{% endfor %}
+      </select>
+    </label>
+    <label>Medio de pago
+      <select name="id_medio_pago">
+        {% for m in medios %}<option value="{{ m.id_medio_pago }}">{{ m.nombre }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Estado
+      <select name="estado"><option>PAGADA</option><option>FIADO</option></select>
+    </label>
+  </div>
+
+  <table id="items">
+    <thead><tr><th>Producto</th><th class="num">Precio</th><th class="num">Cantidad</th><th class="num">Subtotal</th><th></th></tr></thead>
+    <tbody></tbody>
+    <tfoot><tr><td colspan="3" class="num"><strong>Total</strong></td><td class="num"><strong id="total">S/ 0.00</strong></td><td></td></tr></tfoot>
+  </table>
+  <p><button type="button" class="secundario" id="agregar">+ Agregar producto</button></p>
+  <button type="submit">Registrar venta</button>
+</form>
+
+<template id="fila-item">
+  <tr>
+    <td><select name="producto" required>
+      <option value="">Elige…</option>
+      {% for p in productos %}<option value="{{ p.id_producto }}" data-precio="{{ p.precio_venta }}">{{ p.nombre }} (stock {{ p.stock_actual }})</option>{% endfor %}
+    </select></td>
+    <td class="num precio">S/ 0.00</td>
+    <td class="num"><input type="number" name="cantidad" min="1" value="1" required class="cant"></td>
+    <td class="num subtotal">S/ 0.00</td>
+    <td><button type="button" class="quitar secundario" title="Quitar">✕</button></td>
+  </tr>
+</template>
+
+<script>
+const cuerpo = document.querySelector('#items tbody');
+const plantilla = document.querySelector('#fila-item');
+const soles = n => 'S/ ' + n.toFixed(2);
+function recalcular() {
+  let total = 0;
+  cuerpo.querySelectorAll('tr').forEach(tr => {
+    const op = tr.querySelector('select').selectedOptions[0];
+    const precio = parseFloat((op && op.dataset.precio) || 0);
+    const cant = parseInt(tr.querySelector('.cant').value || 0);
+    tr.querySelector('.precio').textContent = soles(precio);
+    tr.querySelector('.subtotal').textContent = soles(precio * cant);
+    total += precio * cant;
+  });
+  document.getElementById('total').textContent = soles(total);
+}
+function agregar() {
+  cuerpo.appendChild(plantilla.content.cloneNode(true));
+  recalcular();
+}
+cuerpo.addEventListener('input', recalcular);
+cuerpo.addEventListener('click', e => {
+  if (e.target.classList.contains('quitar') && cuerpo.rows.length > 1) { e.target.closest('tr').remove(); recalcular(); }
+});
+document.getElementById('agregar').addEventListener('click', agregar);
+agregar();
+</script>
+{% endblock %}

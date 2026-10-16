@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titulo %}Clientes{% endblock %}
+{% block contenido %}
+<h1>Clientes <a class="boton" href="{{ url_for('form_cliente') }}">+ Nuevo cliente</a></h1>
+<form class="filtros" method="get">
+  <input type="search" name="q" value="{{ q }}" placeholder="Buscar por DNI, nombre o apellido">
+  <button>Buscar</button>
+</form>
+<table>
+  <thead><tr><th>DNI</th><th>Cliente</th><th>Teléfono</th><th class="num">Compras</th><th class="num">Límite crédito</th><th class="num">Deuda (fiado)</th><th></th></tr></thead>
+  <tbody>
+  {% for c in clientes %}
+    <tr class="{{ 'alerta' if c.deuda > c.limite_credito }}">
+      <td>{{ c.dni or '—' }}</td>
+      <td><a href="{{ url_for('ver_cliente', id_cliente=c.id_cliente) }}">{{ c.apellidos }}, {{ c.nombres }}</a></td>
+      <td>{{ c.telefono or '—' }}</td>
+      <td class="num">{{ c.n_compras }}</td>
+      <td class="num">{{ c.limite_credito|soles }}</td>
+      <td class="num">{{ c.deuda|soles }}</td>
+      <td><a href="{{ url_for('form_cliente', id_cliente=c.id_cliente) }}">Editar</a></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="vacio">No se encontraron clientes.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

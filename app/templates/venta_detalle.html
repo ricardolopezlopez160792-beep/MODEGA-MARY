@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block titulo %}Venta #{{ venta.id_venta }}{% endblock %}
+{% block contenido %}
+<h1>Venta #{{ venta.id_venta }} <span class="estado {{ venta.estado|lower }}">{{ venta.estado }}</span></h1>
+<p>{{ venta.fecha_hora.strftime('%d/%m/%Y %H:%M') }} · {{ venta.cliente }} · {{ venta.medio_pago }}</p>
+<table>
+  <thead><tr><th>Producto</th><th class="num">Cantidad</th><th class="num">Precio</th><th class="num">Subtotal</th></tr></thead>
+  <tbody>
+  {% for i in items %}
+    <tr><td>{{ i.nombre }}</td><td class="num">{{ i.cantidad }}</td><td class="num">{{ i.precio_unitario|soles }}</td><td class="num">{{ i.subtotal|soles }}</td></tr>
+  {% endfor %}
+  </tbody>
+  <tfoot><tr><td colspan="3" class="num"><strong>Total</strong></td><td class="num"><strong>{{ venta.total|soles }}</strong></td></tr></tfoot>
+</table>
+<div class="acciones">
+  {% if venta.estado == 'FIADO' %}
+  <form method="post" action="{{ url_for('cobrar_fiado', id_venta=venta.id_venta) }}"><button>Marcar fiado como cobrado</button></form>
+  {% endif %}
+  {% if venta.estado != 'ANULADA' %}
+  <form method="post" action="{{ url_for('anular_venta', id_venta=venta.id_venta) }}" onsubmit="return confirm('¿Anular la venta y devolver el stock?')">
+    <button class="peligro">Anular venta</button>
+  </form>
+  {% endif %}
+  <a class="boton secundario" href="{{ url_for('ventas') }}">Volver a ventas</a>
+</div>
+{% endblock %}
